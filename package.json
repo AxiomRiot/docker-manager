@@ -1,34 +1,51 @@
 {
-  "name": "docker-manager",
-  "version": "1.0.0",
+  "name": "docker-at-rest",
+  "version": "0.1.2",
   "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
-  },
-  "main": "dist/index.js",
+  "description": "Docker manager utilities and server using a REST API",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AxiomRiot/docker-manager.git"
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf dist",
+    "lint": "eslint . --ext .ts",
+    "prepublishOnly": "npm run build",
+    "start": "node ./dist/cli.js",
+    "dev": "ts-node src/cli.ts"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AxiomRiot/docker-manager/issues"
+  "bin": {
+    "docker-at-rest": "./dist/cli.js"
   },
-  "homepage": "https://github.com/AxiomRiot/docker-manager#readme",
-  "description": "",
-  "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.5",
-    "@types/node": "^24.10.1",
-    "typescript": "^5.9.3"
+  "engines": {
+    "node": ">=16"
+  },
+  "keywords": [
+    "docker",
+    "manager"
+  ],
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs.js"
+    }
   },
   "dependencies": {
     "chalk": "^5.6.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "winston": "^3.18.3"
+    "winston": "^3.18.3",
+    "yargs": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "@types/yargs": "^17.0.35",
+    "typescript": "^5.9.3"
   }
 }
