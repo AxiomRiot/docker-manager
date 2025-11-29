@@ -1,5 +1,5 @@
-import app from './app';
-import logger from './utils/loggers';
+import app from './app.js';
+import logger from './utils/loggers.js';
 import type { Server } from 'http';
 
 export function createServer(): typeof app {
@@ -14,6 +14,6 @@ export function startServer(port?: number): Server {
   return server;
 }
 
-export { default as DockerService } from './services/dockerService';
-export { default as app } from './app';
-export * from './controllers/dockerController'; // only if you want controllers exposed
+export { default as DockerService } from './services/dockerService.js';
+export { default as app } from './app.js';
+export * from './controllers/dockerController.js'; // only if you want controllers exposed

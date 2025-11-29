@@ -22,3 +22,5 @@ export const CONTAINERS: Record<string, ContainerConfig> = {
     env: 'movie-env'
   }
 }
+
+export const TRANSPORT = 'CONSOLE';

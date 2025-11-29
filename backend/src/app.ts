@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
-import dockerRouter from './routes/dockerRouter';
+import dockerRouter from './routes/dockerRouter.js';
 
 const app = express();
 

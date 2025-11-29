@@ -4,11 +4,11 @@ import {
   startContainerController,
   stopContainerController,
   getContainersController 
-} from '../controllers/dockerController';
+} from '../controllers/dockerController.js';
 
 const dockerRouter = express.Router();
 
-dockerRouter.post('/update', updateImageController);
+dockerRouter.post('/update/', updateImageController);
 dockerRouter.post('/start/', startContainerController);
 dockerRouter.post('/stop/', stopContainerController);
 dockerRouter.get('/containers/', getContainersController);

@@ -1,4 +1,5 @@
 import winston from 'winston';
+import { TRANSPORT } from '../config/config.js';
 const { combine, timestamp, printf } = winston.format
 
 const logger: winston.Logger = winston.createLogger({
@@ -10,9 +11,9 @@ const logger: winston.Logger = winston.createLogger({
   )
 });
 
-if( process.env.TRANSPORT === 'CONSOLE' ) {
+if( TRANSPORT === 'CONSOLE' ) {
   logger.add(new winston.transports.Console());
-} else if ( process.env.TRANSPORT === 'FILE' ) {
+} else if ( TRANSPORT === 'FILE' ) {
   logger.add(new winston.transports.File({
     filename: 'logs/docker-manager.log',
     maxsize: 5242880,

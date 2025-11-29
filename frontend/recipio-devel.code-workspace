@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../movie-picker"
+		},
+		{
+			"path": "../recipio-backend"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}

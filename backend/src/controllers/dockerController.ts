@@ -1,7 +1,7 @@
-import DockerService from "../services/dockerService";
+import DockerService from "../services/dockerService.js";
 import type { Request, Response } from "express";
-import logger from '../utils/loggers';
-import { CONTAINERS, type ContainerConfig } from "../config/config";
+import logger from '../utils/loggers.js';
+import { CONTAINERS, type ContainerConfig } from "../config/config.js";
 
 export async function updateImageController(req: Request, res: Response) {
   const image = req.params.image;

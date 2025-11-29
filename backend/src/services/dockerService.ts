@@ -1,5 +1,5 @@
 import { exec } from "node:child_process";
-import logger from '../utils/loggers';
+import logger from '../utils/loggers.js';
 import chalk from 'chalk';
 
 export default class DockerService {
