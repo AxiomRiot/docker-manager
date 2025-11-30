@@ -49,7 +49,7 @@ export default class DockerService {
         `docker inspect --format='{{.State.Status}}' ${name}`,
         (error, stdout, stderr) => {
           if (error) {
-            return reject('not-running');
+            return reject('stopped');
           }
           resolve(stdout.trim());
         }

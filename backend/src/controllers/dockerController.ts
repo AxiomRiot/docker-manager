@@ -89,18 +89,20 @@ export async function getContainersController(req: Request, res: Response) {
         const status = result.value ?? 'unknown';
         logger.info(`${container} container has status: ${status}`);
         return { container, status };
-      }
-
-      const reason = result?.reason;
-      logger.warn(`Failed to check ${container} container: ${String(reason)}`);
-      const message = typeof reason === 'string'
+      } 
+      else {
+        const reason = result?.reason;
+        const message = typeof reason === 'string'
         ? reason
         : reason instanceof Error
         ? reason.message
         : 'error';
-      return { container, status: message ?? 'unknown' };
 
-    })
+        logger.info(`${container} container has status: ${reason}`);
+
+        return { container, status: message ?? 'unknown' };
+      }
+    });
 
     res.status(200).send({containers});
   } catch (err) {
