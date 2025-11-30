@@ -90,6 +90,7 @@ export async function getContainersController(req: Request, res: Response) {
 
     res.status(200).send({containers});
   } catch (err) {
+    logger.error(`Failed to check health: ${err}`)
     res.status(500).json({ error: "Failed to check health", details: err });
   }
 }
