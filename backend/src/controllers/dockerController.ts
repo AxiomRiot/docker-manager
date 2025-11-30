@@ -77,16 +77,30 @@ export async function stopContainerController(req: Request, res: Response) {
 
 export async function getContainersController(req: Request, res: Response) {
   try {
-    const containers: Record<string, string>[] = [];
+    const names: string[] = Object.keys(CONTAINERS);
+    const settled = await Promise.allSettled(
+      names.map((n) => DockerService.checkContainerHealth(n))
+    )
 
-    Object.keys(CONTAINERS).forEach(async (name) => {
-      const status = await DockerService.checkContainerHealth(name);
+    const containers = names.map((container, index) => {
+      const result = settled[index];
 
-      logger.info(`${name} container has status: ${status}`);
+      if(result?.status === 'fulfilled') {
+        const status = result.value ?? 'unknown';
+        logger.info(`${container} container has status: ${status}`);
+        return { container, status };
+      }
 
-      const entry: Record<string, string> = {name, status};
-      containers.push(entry);
-    });
+      const reason = result?.reason;
+      logger.warn(`Failed to check ${container} container: ${String(reason)}`);
+      const message = typeof reason === 'string'
+        ? reason
+        : reason instanceof Error
+        ? reason.message
+        : 'error';
+      return { container, status: message ?? 'unknown' };
+
+    })
 
     res.status(200).send({containers});
   } catch (err) {
