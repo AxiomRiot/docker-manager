@@ -1,6 +1,7 @@
 import DockerService from "../services/dockerService.js";
 import type { Request, Response } from "express";
 import logger from '../utils/loggers.js';
+import chalk from "chalk";
 import { CONTAINERS, type ContainerConfig } from "../config/config.js";
 
 export async function updateImageController(req: Request, res: Response) {
@@ -76,6 +77,8 @@ export async function stopContainerController(req: Request, res: Response) {
 }
 
 export async function getContainersController(req: Request, res: Response) {
+  logger.info('Received load containers request');
+
   try {
     const names: string[] = Object.keys(CONTAINERS);
     const settled = await Promise.allSettled(
@@ -87,7 +90,7 @@ export async function getContainersController(req: Request, res: Response) {
 
       if(result?.status === 'fulfilled') {
         const status = result.value ?? 'unknown';
-        logger.info(`${container} container has status: ${status}`);
+        logger.info(`${container} container has status: ${chalk.greenBright(status)}`);
         return { container, status };
       } 
       else {
@@ -98,7 +101,7 @@ export async function getContainersController(req: Request, res: Response) {
         ? reason.message
         : 'error';
 
-        logger.info(`${container} container has status: ${reason}`);
+        logger.info(`${container} container has status: ${chalk.redBright(reason)}`);
 
         return { container, status: message ?? 'unknown' };
       }
