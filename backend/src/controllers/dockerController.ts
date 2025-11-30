@@ -58,7 +58,7 @@ export async function startContainerController(req: Request, res: Response) {
 }
 
 export async function stopContainerController(req: Request, res: Response) {
-  const name = req.params.name
+  const name = req.body.name;
 
   if (!name) {
     logger.warn('No name parameter provided in request');
