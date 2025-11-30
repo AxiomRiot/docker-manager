@@ -2,9 +2,9 @@ import type { ContainerType } from '../types/containerTypes';
 
 export function mapResponseToContainerType(data: any): ContainerType {
   return {
-    name: data.name,
+    name: data.container,
     status: data.status,
-    imagePath: `${data.name}.png`,
+    imagePath: `${data.container}.png`,
     lastUpdated: Date.now(),
   };
 }

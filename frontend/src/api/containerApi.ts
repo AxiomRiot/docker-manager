@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://192.168.0.39:3000';
 
 export class ContainerApi {
   private async sendRequest<T = any>(path: string, method = 'GET', payload?: object): Promise<T> {
@@ -18,14 +18,14 @@ export class ContainerApi {
       options.body = JSON.stringify(payload);
     }
 
-    const response: Response = await fetch(url, options);
+    const response: Response = await fetch(url.toString(), options);
 
     if (!response.ok) {
       const text = await response.text().catch(() => '');
       throw new Error(`HTTP ${response.status} ${response.statusText} - ${text}`);
     }
 
-    return response.status === 200 ? (null as unknown as T) : (await response.json());
+    return response.status === 200 ? (await response.json()) : (null as unknown as T);
   }
 
   public get<T = any>(path: string) {

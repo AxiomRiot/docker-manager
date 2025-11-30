@@ -5,11 +5,12 @@ import { mapResponseToContainerType } from '../utils/containerMapper';
 const api = new ContainerApi();
 
 export async function getLoadedContainers(): Promise<ContainerType[]> {
-  const containers: ContainerType[] = [];
+  const data = await api.get('/containers');
+  const results: object[] = data.containers;
 
-  const data = await api.get('/containers/');
-
-  console.warn(data);
+  const containers: ContainerType[] = results.map((container) => {
+    return mapResponseToContainerType(container);
+  });
 
   return containers;
 }
