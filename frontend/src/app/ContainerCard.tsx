@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 interface ContainerCardProps {
   container: ContainerType;
+  onStop: () => void;
+  isStopping: boolean;
 }
 
 const Card = styled.div`
@@ -88,6 +90,10 @@ export const StopButton = styled(ActionButton)`
   &:hover {
     background-color: oklch(57.7% 0.245 27.325);
   }
+
+  &:disabled {
+    background-color: red;
+  }
 `;
 
 const STATUS_COLORS: Record<string, string> = {
@@ -111,8 +117,9 @@ export const StatusText = styled(CardSpan)<{ $status?: string }>`
   transform-origin: center;
 `;
 
-export default function ContainerCard({ container }: ContainerCardProps) {
+export default function ContainerCard({ container, onStop, isStopping }: ContainerCardProps) {
   const imageStr = `${container.name}:latest`;
+  const disabledStop = isStopping || container.status !== 'running';
 
   function calculateTimeDelta(): string {
     const seconds = Date.now() - container.lastUpdated;
@@ -133,7 +140,16 @@ export default function ContainerCard({ container }: ContainerCardProps) {
       <CardActions>
         <PullButton>PULL</PullButton>
         <RunButton>RUN</RunButton>
-        <StopButton>STOP</StopButton>
+        <StopButton
+          disabled
+          onClick={(e) => {
+            e.preventDefault();
+            if (!disabledStop)
+              onStop();
+          }}
+        >
+          STOP
+        </StopButton>
       </CardActions>
     </Card>
   );

@@ -24,6 +24,8 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [containers, setContainers] = useState<ContainerType[] | null>(null);
 
+  const [stopping, setStopping] = useState(false);
+
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -51,6 +53,10 @@ function App() {
     };
   }, []);
 
+  function handleOnStop() {
+    setStopping(!stopping);
+  }
+
   let content = <div></div>;
   if (loading) {
     content = <div style={{ padding: 16 }}>Loading…</div>;
@@ -64,7 +70,7 @@ function App() {
         <ContainerGrid>
           {containers && containers.length > 0 ? (
             containers.map((c, index) => (
-              <ContainerCard key={index} container={c} />
+              <ContainerCard onStop={handleOnStop} isStopping={stopping} key={index} container={c} />
             ))
           ) : (
             <div style={{ padding: 16 }}>No containers available.</div>

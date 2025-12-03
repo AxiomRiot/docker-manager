@@ -14,3 +14,10 @@ export async function getLoadedContainers(): Promise<ContainerType[]> {
 
   return containers;
 }
+
+export async function stopContainer(container: string) {
+  return api.post<{ name: string; status?: string }>(
+    '/containers/stop',
+    { container },
+  );
+}
