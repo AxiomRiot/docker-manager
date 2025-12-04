@@ -17,7 +17,7 @@ export default class DockerService {
 
   public static async pullContainer(image: string) {
     logger.info(`Pulling latest image for [${image}] from docker registry`);
-    return this.runCommand(`docker pull ${image}`);
+    return this.runCommand(`docker pull axiomriot/${image}`);
   }
 
   public static async startContainer(
