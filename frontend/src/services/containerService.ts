@@ -23,7 +23,6 @@ export async function stopContainer(container: string) {
 }
 
 export async function startContainer(container: string) {
-  console.warn(container);
   return api.post<{ name: string }>(
     '/start',
     { name: container },

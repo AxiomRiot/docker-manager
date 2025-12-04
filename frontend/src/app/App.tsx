@@ -56,17 +56,15 @@ function App() {
     setError(null);
 
     try {
-      let result = { name: '' };
-
       if (updatedStatus === STATUS.STOPPED) {
-        result = await stopContainer(container);
+        await stopContainer(container);
       }
       else if (updatedStatus === STATUS.RUNNING) {
-        result = await startContainer(container);
+        await startContainer(container);
       }
 
       setContainers(prev => prev.map(c => (
-        result.name === container ? { ...c, status: updatedStatus } : c),
+        c.name === container ? { ...c, status: updatedStatus } : c),
       ));
     }
     catch (err) {
