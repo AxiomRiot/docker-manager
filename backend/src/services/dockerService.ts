@@ -4,6 +4,7 @@ import chalk from 'chalk';
 
 export default class DockerService {
   private static runCommand(command: string): Promise<{ stdout: string; stderr: string }> {
+    logger.info(`Running command: ${command}`);
     return new Promise((resolve, reject) => {
       exec(command, (error, stdout, stderr) => {
         if (error) {

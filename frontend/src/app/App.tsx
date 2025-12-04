@@ -131,7 +131,7 @@ function App() {
               <ContainerCard
                 onStop={() => handleOnStop(c.name)}
                 onStart={() => handleOnStart(c.name)}
-                onUpdate={() => handleOnUpdate(c.name, c.imagePath)}
+                onUpdate={() => handleOnUpdate(c.name, `${c.name}:latest`)}
                 key={index}
                 container={c}
               />
