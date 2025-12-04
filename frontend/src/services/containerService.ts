@@ -17,7 +17,7 @@ export async function getLoadedContainers(): Promise<ContainerType[]> {
 
 export async function stopContainer(container: string) {
   return api.post<{ name: string; status?: string }>(
-    '/containers/stop',
-    { container },
+    '/stop',
+    { name: container },
   );
 }

@@ -141,7 +141,7 @@ export default function ContainerCard({ container, onStop, isStopping }: Contain
         <PullButton>PULL</PullButton>
         <RunButton>RUN</RunButton>
         <StopButton
-          disabled
+          disabled={isStopping}
           onClick={(e) => {
             e.preventDefault();
             if (!disabledStop)

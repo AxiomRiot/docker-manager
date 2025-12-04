@@ -68,8 +68,8 @@ export async function stopContainerController(req: Request, res: Response) {
   try {
     const { stdout } = await DockerService.stopContainer(name);
     
-    logger.info(`Successfully stopped the ${name} container: ${stdout}`);
-    res.status(200).send();
+    logger.info(`Successfully stopped the ${name} container`);
+    res.status(200).send({name: name});
   } catch (err) {
     logger.error(`Failed to stop container ${name}`, err);
     res.status(500).send({ error: 'Failed to stop container' });
