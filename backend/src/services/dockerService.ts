@@ -33,7 +33,7 @@ export default class DockerService {
       and the ports: ${chalk.magentaBright(ports)}`
     );
   
-    return this.runCommand(`docker run --env-file ${env} -d -p 3000:3000 -v ${volume} --name ${name} axiomriot/${name}:${image}`);
+    return this.runCommand(`docker run --env-file ~/environs/${env} -d -p 3000:3000 -v ${volume} --name ${name} axiomriot/${name}:${image}`);
   }
 
   public static async stopContainer(name: string) {
