@@ -100,7 +100,7 @@ const STATUS_COLORS: Record<string, string> = {
   running: '#4caf50',
   stopped: '#f44336',
   paused: '#ff9800',
-  restarting: '#2196f3',
+  updated: '#2196f3',
   default: '#4d4d4d',
 };
 

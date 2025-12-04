@@ -93,7 +93,7 @@ function App() {
   }
 
   async function handleOnUpdate(container: string, image: string) {
-    await handleRequest(container, STATUS.STOPPED);
+    // await handleRequest(container, STATUS.STOPPED);
 
     setContainers(prev => prev.map(c => (
       c.name === container ? { ...c, status: STATUS.UPDATING } : c),

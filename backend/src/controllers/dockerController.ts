@@ -49,7 +49,7 @@ export async function startContainerController(req: Request, res: Response) {
       container.ports
     );
 
-    logger.info(`Successfully started the ${name} container: ${stdout}`);
+    logger.info(`Successfully started the ${name} container`);
     res.status(200).send({name: name});
   } catch (err) {
     logger.error(`Failed to start container ${name}`, err);
