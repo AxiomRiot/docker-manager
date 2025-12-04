@@ -32,7 +32,7 @@ export default class DockerService {
       `Container is using the ${chalk.cyanBright(env)} environment, the ${chalk.greenBright(volume)} volume, and the ports: ${chalk.magentaBright(ports)}`
     );
   
-    return this.runCommand(`docker run --env-file ~/environs/${env} -d -p 3000:3000 -v ${volume} --name ${name} axiomriot/${name}:${image}`);
+    return this.runCommand(`docker run --env-file ~/environs/${env} -d -p ${ports[0]}:${ports[0]} -v ${volume} --name ${name} axiomriot/${name}:${image}`);
   }
 
   public static async stopContainer(name: string) {

@@ -11,14 +11,14 @@ export const CONTAINERS: Record<string, ContainerConfig> = {
     name: 'recipio',
     image: 'latest',
     volume: '~/logs:/app/logs',
-    ports: ['3000'],
+    ports: ['3001'],
     env: 'recipio-env'
   },
   'movie-night': {
     name: 'movie-night',
     image: 'latest',
     volume: '~/logs:/app/logs',
-    ports: ['3001'],
+    ports: ['3002'],
     env: 'movie-env'
   }
 }
