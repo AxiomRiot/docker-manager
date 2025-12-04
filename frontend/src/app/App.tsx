@@ -1,11 +1,11 @@
 /* eslint-disable style/jsx-one-expression-per-line */
 /* eslint-disable style/multiline-ternary */
-import type { ContainerType } from '../types/containerTypes';
+import { STATUS, type ContainerType } from '../types/containerTypes';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Theme } from '../components/Theme';
 import TopBar from '../components/TopBar';
-import { getLoadedContainers } from '../services/containerService';
+import { getLoadedContainers, stopContainer } from '../services/containerService';
 import ContainerCard from './ContainerCard';
 
 const ContainerGrid = styled.div`
@@ -22,9 +22,9 @@ const ContainerGrid = styled.div`
 function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [containers, setContainers] = useState<ContainerType[] | null>(null);
+  const [containers, setContainers] = useState<ContainerType[]>([]);
 
-  const [stopping, setStopping] = useState(false);
+  const [stopping, setStopping] = useState<string[]>([]);
 
   useEffect(() => {
     let mounted = true;
@@ -53,8 +53,30 @@ function App() {
     };
   }, []);
 
-  function handleOnStop() {
-    setStopping(!stopping);
+  async function handleOnStop(container: string) {
+    setError(null);
+
+    setStopping(prev => [...prev, container]);
+    setContainers(prev => prev.map(c => (
+      c.name === container ? { ...c, status: STATUS.STOPPING } : c),
+    ));
+
+    try {
+      const result = await stopContainer(container);
+      setContainers(prev => prev.map(c => (
+        result.name === container ? { ...c, status: STATUS.STOPPED } : c),
+      ));
+    }
+    catch (err) {
+      setContainers(prev => prev.map(c => (
+        c.name === container ? { ...c, status: STATUS.RUNNING } : c),
+      ));
+
+      setError(String(err));
+    }
+    finally {
+      setStopping(prev => prev.filter(c => c !== container));
+    }
   }
 
   let content = <div></div>;
@@ -68,9 +90,14 @@ function App() {
     else {
       content = (
         <ContainerGrid>
-          {containers && containers.length > 0 ? (
+          {containers.length > 0 ? (
             containers.map((c, index) => (
-              <ContainerCard onStop={handleOnStop} isStopping={stopping} key={index} container={c} />
+              <ContainerCard
+                onStop={() => handleOnStop(c.name)}
+                isStopping={stopping.includes(c.name)}
+                key={index}
+                container={c}
+              />
             ))
           ) : (
             <div style={{ padding: 16 }}>No containers available.</div>
