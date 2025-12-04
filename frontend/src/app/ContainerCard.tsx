@@ -5,6 +5,7 @@ interface ContainerCardProps {
   container: ContainerType;
   onStop: () => void;
   onStart: () => void;
+  onUpdate: () => void;
 }
 
 const Card = styled.div`
@@ -116,7 +117,7 @@ export const StatusText = styled(CardSpan)<{ $status?: string }>`
   transform-origin: center;
 `;
 
-export default function ContainerCard({ container, onStop, onStart }: ContainerCardProps) {
+export default function ContainerCard({ container, onStop, onStart, onUpdate }: ContainerCardProps) {
   const imageStr = `${container.name}:latest`;
   const disabledStop = container.status !== 'running';
 
@@ -137,7 +138,14 @@ export default function ContainerCard({ container, onStop, onStart }: ContainerC
       </StatusDiv>
       <CardText>{calculateTimeDelta()}</CardText>
       <CardActions>
-        <PullButton>PULL</PullButton>
+        <PullButton
+          onClick={(e) => {
+            e.preventDefault();
+            onUpdate();
+          }}
+        >
+          PULL
+        </PullButton>
         <RunButton
           onClick={(e) => {
             e.preventDefault();

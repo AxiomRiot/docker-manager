@@ -5,7 +5,8 @@ import chalk from "chalk";
 import { CONTAINERS, type ContainerConfig } from "../config/config.js";
 
 export async function updateImageController(req: Request, res: Response) {
-  const image = req.params.image;
+  const image = req.body.image;
+  const name = req.body.name;
 
   logger.info(`Received request to update docker image: ${image}`);
 
@@ -16,8 +17,8 @@ export async function updateImageController(req: Request, res: Response) {
 
   try {
     const { stdout } = await DockerService.pullContainer(image);
-    logger.info(`Successfully pulled image ${image}: ${stdout}`);
-    res.status(200).send();
+    logger.info(`Successfully pulled image ${image} for container ${name}`);
+    res.status(200).send({name: name});
   } catch (err) {
     logger.error(`Failed to pull image ${image}`, err);
     res.status(500).send({ error: 'Failed to pull image' });

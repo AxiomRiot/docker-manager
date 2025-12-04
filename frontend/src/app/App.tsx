@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Theme } from '../components/Theme';
 import TopBar from '../components/TopBar';
-import { getLoadedContainers, startContainer, stopContainer } from '../services/containerService';
+import { getLoadedContainers, startContainer, stopContainer, updateContainer } from '../services/containerService';
 import { STATUS } from '../types/containerTypes';
 import ContainerCard from './ContainerCard';
 
@@ -92,6 +92,29 @@ function App() {
     await handleRequest(container, STATUS.RUNNING);
   }
 
+  async function handleOnUpdate(container: string, image: string) {
+    await handleRequest(container, STATUS.STOPPED);
+
+    setContainers(prev => prev.map(c => (
+      c.name === container ? { ...c, status: STATUS.UPDATING } : c),
+    ));
+
+    try {
+      await updateContainer(container, image);
+
+      setContainers(prev => prev.map(c => (
+        c.name === container ? { ...c, status: STATUS.UPDATED } : c),
+      ));
+    }
+    catch (err) {
+      setContainers(prev => prev.map(c => (
+        c.name === container ? { ...c, status: STATUS.RUNNING } : c),
+      ));
+
+      setError(String(err));
+    }
+  }
+
   let content = <div></div>;
   if (loading) {
     content = <div style={{ padding: 16 }}>Loading…</div>;
@@ -108,6 +131,7 @@ function App() {
               <ContainerCard
                 onStop={() => handleOnStop(c.name)}
                 onStart={() => handleOnStart(c.name)}
+                onUpdate={() => handleOnUpdate(c.name, c.imagePath)}
                 key={index}
                 container={c}
               />

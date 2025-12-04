@@ -24,7 +24,7 @@ export default function TopBar() {
   return (
     <TopBarContainer>
       <StyledImage src="docker.png" />
-      <Title>dockager</Title>
+      <Title>dockerDash</Title>
     </TopBarContainer>
   );
 }

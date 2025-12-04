@@ -4,6 +4,7 @@ export enum STATUS {
   STOPPING = 'stopping',
   STOPPED = 'stopped',
   UPDATING = 'updating',
+  UPDATED = 'updated',
   UNKNOWN = 'unknown',
 }
 

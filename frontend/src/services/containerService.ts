@@ -28,3 +28,13 @@ export async function startContainer(container: string) {
     { name: container },
   );
 }
+
+export async function updateContainer(container: string, image: string) {
+  return api.post<{ name: string }>(
+    '/update',
+    {
+      name: container,
+      image,
+    },
+  );
+}
