@@ -4,7 +4,7 @@ import styled from 'styled-components';
 interface ContainerCardProps {
   container: ContainerType;
   onStop: () => void;
-  isStopping: boolean;
+  onStart: () => void;
 }
 
 const Card = styled.div`
@@ -19,7 +19,6 @@ const Card = styled.div`
   align-items: center;
   min-height: 180px;
   max-height: 300px;
-  max-width: 180px;
 `;
 
 export const CardImage = styled.img`
@@ -45,11 +44,11 @@ export const CardSpan = styled.span`
   margin-top: 2px;
   color: oklch(44.6% 0.043 257.281);
   margin-bottom: 4px;
-`
+`;
 
 export const StatusDiv = styled.div`
   margin-bottom: 8px;
-`
+`;
 
 export const CardActions = styled.div`
   display: flex;
@@ -117,9 +116,9 @@ export const StatusText = styled(CardSpan)<{ $status?: string }>`
   transform-origin: center;
 `;
 
-export default function ContainerCard({ container, onStop, isStopping }: ContainerCardProps) {
+export default function ContainerCard({ container, onStop, onStart }: ContainerCardProps) {
   const imageStr = `${container.name}:latest`;
-  const disabledStop = isStopping || container.status !== 'running';
+  const disabledStop = container.status !== 'running';
 
   function calculateTimeDelta(): string {
     const seconds = Date.now() - container.lastUpdated;
@@ -139,9 +138,16 @@ export default function ContainerCard({ container, onStop, isStopping }: Contain
       <CardText>{calculateTimeDelta()}</CardText>
       <CardActions>
         <PullButton>PULL</PullButton>
-        <RunButton>RUN</RunButton>
+        <RunButton
+          onClick={(e) => {
+            e.preventDefault();
+            onStart();
+          }}
+        >
+          RUN
+        </RunButton>
         <StopButton
-          disabled={isStopping}
+          disabled={container.status === 'stopped'}
           onClick={(e) => {
             e.preventDefault();
             if (!disabledStop)

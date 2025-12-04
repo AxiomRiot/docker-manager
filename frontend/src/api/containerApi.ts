@@ -25,7 +25,6 @@ export class ContainerApi {
       throw new Error(`HTTP ${response.status} ${response.statusText} - ${text}`);
     }
 
-    console.warn(response);
     return response.status === 200 ? (await response.json()) : (null as unknown as T);
   }
 

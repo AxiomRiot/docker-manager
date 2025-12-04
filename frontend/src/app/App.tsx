@@ -1,16 +1,17 @@
 /* eslint-disable style/jsx-one-expression-per-line */
 /* eslint-disable style/multiline-ternary */
-import { STATUS, type ContainerType } from '../types/containerTypes';
+import type { ContainerType } from '../types/containerTypes';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Theme } from '../components/Theme';
 import TopBar from '../components/TopBar';
-import { getLoadedContainers, stopContainer } from '../services/containerService';
+import { getLoadedContainers, startContainer, stopContainer } from '../services/containerService';
+import { STATUS } from '../types/containerTypes';
 import ContainerCard from './ContainerCard';
 
 const ContainerGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.5rem;
   padding: 1rem;
 
@@ -23,8 +24,6 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [containers, setContainers] = useState<ContainerType[]>([]);
-
-  const [stopping, setStopping] = useState<string[]>([]);
 
   useEffect(() => {
     let mounted = true;
@@ -53,18 +52,21 @@ function App() {
     };
   }, []);
 
-  async function handleOnStop(container: string) {
+  async function handleRequest(container: string, updatedStatus: STATUS) {
     setError(null);
 
-    setStopping(prev => [...prev, container]);
-    setContainers(prev => prev.map(c => (
-      c.name === container ? { ...c, status: STATUS.STOPPING } : c),
-    ));
-
     try {
-      const result = await stopContainer(container);
+      let result = { name: '' };
+
+      if (updatedStatus === STATUS.STOPPED) {
+        result = await stopContainer(container);
+      }
+      else if (updatedStatus === STATUS.RUNNING) {
+        result = await startContainer(container);
+      }
+
       setContainers(prev => prev.map(c => (
-        result.name === container ? { ...c, status: STATUS.STOPPED } : c),
+        result.name === container ? { ...c, status: updatedStatus } : c),
       ));
     }
     catch (err) {
@@ -74,9 +76,22 @@ function App() {
 
       setError(String(err));
     }
-    finally {
-      setStopping(prev => prev.filter(c => c !== container));
-    }
+  }
+
+  async function handleOnStop(container: string) {
+    setContainers(prev => prev.map(c => (
+      c.name === container ? { ...c, status: STATUS.STOPPING } : c),
+    ));
+
+    await handleRequest(container, STATUS.STOPPED);
+  }
+
+  async function handleOnStart(container: string) {
+    setContainers(prev => prev.map(c => (
+      c.name === container ? { ...c, status: STATUS.STARTING } : c),
+    ));
+
+    await handleRequest(container, STATUS.RUNNING);
   }
 
   let content = <div></div>;
@@ -94,7 +109,7 @@ function App() {
             containers.map((c, index) => (
               <ContainerCard
                 onStop={() => handleOnStop(c.name)}
-                isStopping={stopping.includes(c.name)}
+                onStart={() => handleOnStart(c.name)}
                 key={index}
                 container={c}
               />

@@ -21,3 +21,11 @@ export async function stopContainer(container: string) {
     { name: container },
   );
 }
+
+export async function startContainer(container: string) {
+  console.warn(container);
+  return api.post<{ name: string }>(
+    '/start',
+    { name: container },
+  );
+}

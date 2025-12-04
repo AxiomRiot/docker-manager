@@ -1,4 +1,5 @@
 export enum STATUS {
+  STARTING = 'starting',
   RUNNING = 'running',
   STOPPING = 'stopping',
   STOPPED = 'stopped',
